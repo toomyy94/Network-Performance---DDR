@@ -24,18 +24,18 @@ def vc_generator(env,av_rate,av_duration,b,stats):
 			stats.loadint += (1.0/stats.bw)*(stats.bw-stats.available_bw)*(env.now-stats.lastloadchange)
 			stats.lastloadchange=env.now
 			stats.available_bw -= b
-			print("time %f: VC %d started"%(env.now,stats.vcs_total))
+		#	print("time %f: VC %d started"%(env.now,stats.vcs_total))
 			env.process(vc(env,stats.vcs_total,av_duration,b,stats))
 		else:
 			stats.vcs_blk += 1
-			print("time %f: VC %d blocked"%(env.now,stats.vcs_total))
+		#	print("time %f: VC %d blocked"%(env.now,stats.vcs_total))
 
 def vc(env,id,av_duration,b,stats):
 	yield env.timeout(np.random.exponential(av_duration))
 	stats.loadint += (1.0/stats.bw)*(stats.bw-stats.available_bw)*(env.now-stats.lastloadchange)
 	stats.lastloadchange=env.now
 	stats.available_bw += b
-	print("time %f: VC %d ended"%(env.now,id))
+	#print("time %f: VC %d ended"%(env.now,id))
 
 lamb=1
 invmu=10
@@ -51,6 +51,7 @@ y=[2,4,6,8,10]
 z=[16,25,32]
 
 res = np.zeros((5,5,3,4))
+
 
 for j in range(0,len(x)):
 	for k in range(0,len(y)):
@@ -68,8 +69,12 @@ for j in range(0,len(x)):
 			#print("Theoretical Block Probability=%f"%(blkp))
 			i1=np.arange(1,C+1)
 			linkload=(1.0/C)*np.sum(np.power(1.0*rho,i1)/factorial(i1-1))/np.sum(np.power(1.0*rho,i)/factorial(i))
-			print("Theoretical Average Link Load=%.2f%%"%(100*linkload))
+			#print("Theoretical Average Link Load=%.2f%%"%(100*linkload))
 			res[j,k,w,:] =np.array([1.0*stats.vcs_blk/stats.vcs_total,100.0*stats.loadint/simtime,blkp,100*linkload])
-plt.plot(res[:,:,0,1])
+
+plt.title('BW = '+str(z[0]))
+for k in range(0,len(y)):
+	plt.plot(x,res[:,k,0,1],label=str(y[k]))
+plt.legend() 
 plt.show()
 
