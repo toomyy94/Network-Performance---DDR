@@ -161,16 +161,16 @@ env = simpy.Environment()
 
 #Sender (tx) -> Node1 -> Link -> Receiver (rx)
 
-lamb=450
+lamb=150
 K=64
 B=2e6
 tmp=782
 #mu=100
 
 rx=pkt_Receiver(env,'B')
-tx=pkt_Sender(env,'A',450,'B')
+tx=pkt_Sender(env,'A',lamb,'B')
 node1=Node(env,'N1',np.inf)
-link=Link(env,'L',2e6,64)
+link=Link(env,'L',B,K)
 
 tx.out=node1
 node1.add_conn(link,'B')
@@ -193,8 +193,8 @@ ro=1.0*lamb/mu
 PB=(ro**K)/(np.sum(ro**np.arange(0,K+1)))
 lambK=(1-PB)*lamb
 
-a=64*B
-b=1500*B
+a=64*8
+b=1500*8
 
 #M/M/1
 Wmm1=1.0/(mu-lamb)
@@ -203,16 +203,16 @@ Wmd1=(1.0/mu)+(lamb/(2.0*mu*(mu-lamb)))
 #M/M//1/K
 Wmm1k=(1.0/lambK)*((ro/(1.0-ro))-(K+1.0)*ro**(K+1.0)/(1.0-ro**K+1))
 #M/G/1
-ES=((a+b)/2.0*B)
+ES=((a+b)/(2.0*B))
 ES2=(a**2.0+b**2.0)/(2.0*B**2.0)
-Wmg1=(lamb*ES2)/(2.0*(1.0-lamb*ES))+ES
+Wmg1=((lamb*ES2)/(2.0*(1.0-lamb*ES)))+ES
 
 print("Delay M/M/1: ")
-print(round(Wmm1, 3))
+print(round(Wmm1, 4))
 print("Delay M/D/1: ")
-print(round(Wmd1, 3))
+print(round(Wmd1, 4))
 print("Delay M/G/1: ")
-print(round(Wmg1, 3))
+print(round(Wmg1, 4))
 print("Delay M/M/1/K: ")
 print(round(Wmm1k, 3))
 print("Probabilidade de Bloqueio: ")
