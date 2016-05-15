@@ -161,27 +161,32 @@ env = simpy.Environment()
 
 #Sender (tx) -> Node1 -> Link -> Receiver (rx)
 
-lamb=350
+lamb=150
 K=64
 B=2e6
 tmp=782
-mu=100
+#mu=100
 
 rx=pkt_Receiver(env,'B')
 tx=pkt_Sender(env,'A',lamb,'B')
-node1=Node(env,'N1',mu,K)
-link=Link(env,'L',B,K)
+node1=Node(env,'N1',np.inf)
+node2=Node(env,'N2',np.inf)
+link1=Link(env,'L',B,K)
+link2=Link(env,'L',B,K)
 
 tx.out=node1
-node1.add_conn(link,'B')
-link.out=rx
+node1.add_conn(link1,'B')
+node2.add_conn(link2,'B')
+link1.out=node2
+link2.out=rx
+#---------------------------------
 
-print(node1.out)
+print(node2.out)
 
 simtime=100
 env.run(simtime)
 
-print('Loss probability: %.2f%%'%(100.0*(link.lost_pkts+node1.lost_pkts)/tx.packets_sent))
+#print('Loss probability: %.2f%%'%(100.0*link.lost_pkts/tx.packets_sent))
 print('Average delay: %f sec'%(1.0*rx.overalldelay/rx.packets_recv))
 print('Transmitted bandwidth: %.1f Bytes/sec'%(1.0*rx.overallbytes/simtime))
 
@@ -195,6 +200,9 @@ lambK=(1-PB)*lamb
 
 a=64*8
 b=1500*8
+
+print('total loss:%.2f%%'%(100.0*(link1.lost_pkts+link2.lost_pkts+node1.lost_pkts+node2.lost_pkts)/(tx.packets_sent)) ) 
+
 
 #M/M/1
 Wmm1=1.0/(mu-lamb)
@@ -217,6 +225,11 @@ print("Delay M/M/1/K: ")
 print(round(Wmm1k, 3))
 print("Probabilidade de Bloqueio: ")
 print(round(PB, 3)*100)
+
+
+
+
+
 
 
 
