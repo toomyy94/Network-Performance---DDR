@@ -217,3 +217,6 @@ print("Delay M/M/1/K: ")
 print(round(Wmm1k, 3))
 print("Probabilidade de Bloqueio: ")
 print(round(PB, 3)*100)
+
+
+
