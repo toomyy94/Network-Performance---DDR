@@ -161,11 +161,12 @@ env = simpy.Environment()
 
 #Sender (tx) -> Node1 -> Link -> Receiver (rx)
 
-lamb=150
-K=64
+lamb=300
+K=96
 B=10e6
 tmp=782
-mu=100
+#mu=100
+mu=B/(tmp*8)
 
 rx=pkt_Receiver(env,'B')
 tx=pkt_Sender(env,'A',lamb,'B')
@@ -187,7 +188,7 @@ print('Transmitted bandwidth: %.1f Bytes/sec'%(1.0*rx.overallbytes/simtime))
 
 #... prints de delays das varias formulas e perda prob
 
-mu=B/(tmp*8)
+
 
 ro=1.0*lamb/mu
 PB=(ro**K)/(np.sum(ro**np.arange(0,K+1)))

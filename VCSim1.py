@@ -60,21 +60,27 @@ for j in range(0,len(x)):
 			env = simpy.Environment()
 			env.process(vc_generator(env,x[j],y[k],b,stats))
 			env.run(simtime)
-			C=z[w]/b
-			#print("Simulated Block Probability=%f"%(1.0*stats.vcs_blk/stats.vcs_total))
-			#print("Simulated Average Link Load=%.2f%%"%(100.0*stats.loadint/simtime))
-			rho=lamb*invmu
+			C=1.0*z[w]/b
+			print("Simulated Block Probability=%f"%(1.0*stats.vcs_blk/stats.vcs_total))
+			print("Simulated Average Link Load=%.2f%%"%(100.0*stats.loadint/simtime))
+			rho=x[j]*y[k]
 			i=np.arange(0,C+1)
 			blkp=(np.power(1.0*rho,C)/factorial(C))/np.sum(np.power(1.0*rho,i)/factorial(i))
-			#print("Theoretical Block Probability=%f"%(blkp))
+			print("Theoretical Block Probability=%f"%(blkp))
 			i1=np.arange(1,C+1)
 			linkload=(1.0/C)*np.sum(np.power(1.0*rho,i1)/factorial(i1-1))/np.sum(np.power(1.0*rho,i)/factorial(i))
-			#print("Theoretical Average Link Load=%.2f%%"%(100*linkload))
+			print("Theoretical Average Link Load=%.2f%%"%(100*linkload))
 			res[j,k,w,:] =np.array([1.0*stats.vcs_blk/stats.vcs_total,100.0*stats.loadint/simtime,blkp,100*linkload])
 
-plt.title('BW = '+str(z[0]))
+plt.title('BandWidth = '+str(z[0]))
 for k in range(0,len(y)):
-	plt.plot(x,res[:,k,0,1],label=str(y[k]))
+	#carga
+	plt.plot(x,res[:,k,0,0],label=str(y[k]))
+	plt.plot(x,res[:,k,0,2],ls='dotted')
+	
+	#descomentar para prob. de bloqueio
+	#plt.plot(x,res[:,k,0,1],label=str(y[k]))
+	#plt.plot(x,res[:,k,0,3],ls='dotted')
 plt.legend() 
 plt.show()
 
