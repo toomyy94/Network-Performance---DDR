@@ -54,17 +54,17 @@ class Node(object):
 			if self.out.has_key(pkt.dst):
 				#random routing over all possible paths to dst
 				outobj=self.out[pkt.dst][random.randint(0,len(self.out[pkt.dst])-1)]
-				print(str(self.env.now)+': Packet out node '+self.id+' - '+str(pkt))
+				#print(str(self.env.now)+': Packet out node '+self.id+' - '+str(pkt))
 				outobj.put(pkt)
-			else:
-				print(str(self.env.now)+': Packet lost in node '+self.id+'- No routing path - '+str(pkt))
+			#else:
+				#print(str(self.env.now)+': Packet lost in node '+self.id+'- No routing path - '+str(pkt))
 	
 	def put(self,pkt):
 		if len(self.queue.items)<self.qsize:
 			self.queue.put(pkt)
 		else:
 			self.lost_pkts += 1
-			print(str(env.now)+': Packet lost in node '+self.id+' queue - '+str(pkt))
+			#print(str(env.now)+': Packet lost in node '+self.id+' queue - '+str(pkt))
 
 class Link(object):
 	"""
@@ -88,7 +88,7 @@ class Link(object):
 		while True:
 			pkt = (yield self.queue.get())
 			yield self.env.timeout(1.0*pkt.size/self.speed)
-			print(str(self.env.now)+': Packet out link '+self.id+' - '+str(pkt))
+			#print(str(self.env.now)+': Packet out link '+self.id+' - '+str(pkt))
 			self.out.put(pkt)
 				
 	def put(self,pkt):
@@ -96,7 +96,7 @@ class Link(object):
 			self.queue.put(pkt)
 		else:
 			self.lost_pkts += 1
-			print(str(self.env.now)+': Packet lost in link '+self.id+' queue - '+str(pkt))
+			#print(str(self.env.now)+': Packet lost in link '+self.id+' queue - '+str(pkt))
 		
 		
 class pkt_Sender(object):
@@ -128,7 +128,7 @@ class pkt_Sender(object):
 			else:
 				dst=self.dst[random.randint(0,len(self.dst)-1)]
 			pkt = Packet(self.env.now,size,dst)
-			print(str(self.env.now)+': Packet sent by '+self.id+' - '+str(pkt))
+			#print(str(self.env.now)+': Packet sent by '+self.id+' - '+str(pkt))
 			self.out.put(pkt)
 		
 class pkt_Receiver(object):
@@ -152,15 +152,17 @@ class pkt_Receiver(object):
 			self.packets_recv += 1
 			self.overalldelay += self.env.now-pkt.time
 			self.overallbytes += pkt.size
-			print(str(self.env.now)+': Packet received by '+self.id+' - '+str(pkt))
+			#print(str(self.env.now)+': Packet received by '+self.id+' - '+str(pkt))
 	
 	def put(self,pkt):
 		self.queue.put(pkt)
 
-env = simpy.Environment()
+for i in range(0,4):
+	env = simpy.Environment()
 
-#Sender (tx) -> Node1 -> Link -> Receiver (rx)
+	#Sender (tx) -> Node1 -> Link -> Receiver (rx)
 
+<<<<<<< HEAD:Guia3/PktSim5.py
 lamb=300
 K=96
 B=2e6
@@ -168,63 +170,76 @@ tmp=782
 R=300
 mu=B/(tmp*8)
 #mu=350
+=======
+	lamb=150
+	K=1000
+	B=2e6
+	tmp=782
+	R=350
+	mu=B/(tmp*8)
+
+>>>>>>> origin/master:PktSim5.py
 
 
-rx=pkt_Receiver(env,'B')
-tx=pkt_Sender(env,'A',lamb,'B')
-node1=Node(env,'N1',R,K)
-link=Link(env,'L',B,K)
-link2 = Link(env,'L2',B,K)
+	rx=pkt_Receiver(env,'B')
+	tx=pkt_Sender(env,'A',lamb,'B')
+	node1=Node(env,'N1',R,K)
+	link=Link(env,'L',B,K)
+	link2 = Link(env,'L2',B,K)
 
-tx.out=link
-node1.add_conn(link,'B')
-node1.add_conn(link2,'B')
+	tx.out=link
+	node1.add_conn(link,'B')
+	node1.add_conn(link2,'B')
 
-link.out=node1
-link2.out = rx
+	link.out=node1
+	link2.out = rx
 
 
-print(node1.out)
+	#print(node1.out)
 
-simtime=100
-env.run(simtime)
+	simtime=100
+	env.run(simtime)
 
-print('Loss probability: %.2f%%'%(100.0*(link.lost_pkts+node1.lost_pkts+link2.lost_pkts)/tx.packets_sent))
-print('Average delay: %f sec'%(1.0*rx.overalldelay/rx.packets_recv))
-print('Transmitted bandwidth: %.1f Bytes/sec'%(1.0*rx.overallbytes/simtime))
+	print('%.2f%%'%(100.0*(link.lost_pkts+node1.lost_pkts+link2.lost_pkts)/tx.packets_sent))
+	print('%f '%(1.0*rx.overalldelay/rx.packets_recv))
+	#print('Transmitted bandwidth: %.1f Bytes/sec'%(1.0*rx.overallbytes/simtime))
 
+<<<<<<< HEAD:Guia3/PktSim5.py
 #... prints de delays das varias formulas e perda prob 
+=======
+	#... prints de delays das varias formulas e perda prob
+>>>>>>> origin/master:PktSim5.py
 
 
 
-ro=1.0*lamb/mu
-PB=(ro**K)/(np.sum(ro**np.arange(0,K+1)))
-lambK=(1-PB)*lamb
+	ro=1.0*lamb/mu
+	PB=(ro**K)/(np.sum(ro**np.arange(0,K+1)))
+	lambK=(1-PB)*lamb
 
-a=64*8
-b=1500*8
+	a=64*8
+	b=1500*8
 
-#M/M/1
-Wmm1=1.0/(mu-lamb)
-#M/D/1
-Wmd1=(1.0/mu)+(lamb/(2.0*mu*(mu-lamb)))
-#M/M//1/K
-Wmm1k=(1.0/lambK)*((ro/(1.0-ro))-(K+1.0)*ro**(K+1.0)/(1.0-ro**K+1))
-#M/G/1
-ES=((a+b)/(2.0*B))
-ES2=(a**2.0+b**2.0)/(2.0*B**2.0)
-Wmg1=((lamb*ES2)/(2.0*(1.0-lamb*ES)))+ES
+	#M/M/1
+	Wmm1=1.0/(mu-lamb)
+	#M/D/1
+	Wmd1=(1.0/mu)+(lamb/(2.0*mu*(mu-lamb)))
+	#M/M//1/K
+	Wmm1k=(1.0/lambK)*((ro/(1.0-ro))-(K+1.0)*ro**(K+1.0)/(1.0-ro**K+1))
+	#M/G/1
+	ES=((a+b)/(2.0*B))
+	ES2=(a**2.0+b**2.0)/(2.0*B**2.0)
+	Wmg1=((lamb*ES2)/(2.0*(1.0-lamb*ES)))+ES
 
-print("Delay M/M/1: ")
-print(round(Wmm1, 4))
-print("Delay M/D/1: ")
-print(round(Wmd1, 4))
-print("Delay M/G/1: ")
-print(round(Wmg1, 4))
-print("Delay M/M/1/K: ")
-print(round(Wmm1k, 3))
-print("Probabilidade de Bloqueio: ")
-print(round(PB, 3)*100)
+	print("Delay M/M/1: ")
+	print(round(Wmm1, 4))
+	print("Delay M/D/1: ")
+	print(round(Wmd1, 4))
+	print("Delay M/G/1: ")
+	print(round(Wmg1, 4))
+	print("Delay M/M/1/K: ")
+	print(round(Wmm1k, 3))
+	print("Probabilidade de Bloqueio: ")
+	print(round(PB, 3)*100)
 
 
 
