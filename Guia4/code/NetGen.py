@@ -14,12 +14,12 @@ args=parser.parse_args()
 filename=args.file 
 
 #Large Network
-nodes={'Corunha','Vigo','Gijon','Porto','Aveiro','Lisboa','Portimao','Braganca','Vilar.Formoso','Badajoz','Sevilha','Bilbau','Andorra','Barcelona','Madrid','Valencia','Palma','Granada'}
-links={('Corunha','Gijon'),('Gijon','Bilbau'),('Vigo','Corunha'),('Porto','Vigo'),('Porto','Braganca'),('Aveiro','Porto'),('Braganca','Gijon'),('Braganca','Bilbau'),('Braganca','Vilar.Formoso'),('Aveiro','Vilar.Formoso'),('Madrid','Vilar.Formoso'),('Badajoz','Vilar.Formoso'),('Aveiro','Lisboa'),('Badajoz','Lisboa'),('Portimao','Lisboa'),('Portimao','Sevilha'),('Badajoz','Sevilha'),('Badajoz','Valencia'),('Granada','Sevilha'),('Granada','Valencia'),('Granada','Palma'),('Palma','Valencia'),('Madrid','Valencia'),('Madrid','Barcelona'),('Barcelona','Valencia'),('Barcelona','Palma'),('Barcelona','Andorra'),('Bilbau','Andorra'),('Bilbau','Madrid')}
+#nodes={'Corunha','Vigo','Gijon','Porto','Aveiro','Lisboa','Portimao','Braganca','Vilar.Formoso','Badajoz','Sevilha','Bilbau','Andorra','Barcelona','Madrid','Valencia','Palma','Granada'}
+#links={('Corunha','Gijon'),('Gijon','Bilbau'),('Vigo','Corunha'),('Porto','Vigo'),('Porto','Braganca'),('Aveiro','Porto'),('Braganca','Gijon'),('Braganca','Bilbau'),('Braganca','Vilar.Formoso'),('Aveiro','Vilar.Formoso'),('Madrid','Vilar.Formoso'),('Badajoz','Vilar.Formoso'),('Aveiro','Lisboa'),('Badajoz','Lisboa'),('Portimao','Lisboa'),('Portimao','Sevilha'),('Badajoz','Sevilha'),('Badajoz','Valencia'),('Granada','Sevilha'),('Granada','Valencia'),('Granada','Palma'),('Palma','Valencia'),('Madrid','Valencia'),('Madrid','Barcelona'),('Barcelona','Valencia'),('Barcelona','Palma'),('Barcelona','Andorra'),('Bilbau','Andorra'),('Bilbau','Madrid')}
 
 #Small Network
-#nodes={'Aveiro','Porto','Lisboa','Viseu'}
-#links={('Aveiro','Porto'),('Aveiro','Lisboa'),('Aveiro','Viseu'),('Viseu','Lisboa'),('Viseu','Porto')}
+nodes={'Aveiro','Porto','Lisboa','Viseu'}
+links={('Aveiro','Porto'),('Aveiro','Lisboa'),('Aveiro','Viseu'),('Viseu','Lisboa'),('Viseu','Porto')}
 
 pos={}
 
