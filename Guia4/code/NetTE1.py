@@ -69,7 +69,7 @@ for pair in allpairs:
 		print('#flow %s-%s: %.2f micro sec'%(pair[0],pair[1],Ws))
 
 meanWs, maxWs, maxWsK = listStats(WsAll)
-print('Mean one-way delay: %.2f ms\nMaximum one-way delay: %.2f micro sec for flow %s-%s'%(meanWs,maxWs,maxWsK[0],maxWsK[1]))
+print('Mean one-way delay: %.2f ms\nMaximum one-way delay: %.2f mili sec for flow %s-%s'%(meanWs,maxWs,maxWsK[0],maxWsK[1]))
 
 print('---')
 loadAll={}

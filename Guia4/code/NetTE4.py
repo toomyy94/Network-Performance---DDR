@@ -32,13 +32,13 @@ def compute_average(allpairs,net,WsAll,sol):
 			#print('#flow %s-%s: %.2f micro sec'%(pair[0],pair[1],Ws))
 
 	meanWs, maxWs, maxWsK = listStats(WsAll)
-	#print('Mean one-way delay: %.2f ms\nMaximum one-way delay: %.2f micro sec for flow %s-%s'%(meanWs,maxWs,maxWsK[0],maxWsK[1]))
+	#print('Mean one-way delay: %.2f ms\nMaximum one-way delay: %.2f mili sec for flow %s-%s'%(meanWs,maxWs,maxWsK[0],maxWsK[1]))
 	return meanWs
 
 WsAll={}
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-f', '--file', nargs='?', help='input network file', default='networks.dat')
+parser.add_argument('-f', '--file', nargs='?', help='input network file', default='smallnet.dat')
 args=parser.parse_args()
 
 filename=args.file 
@@ -95,10 +95,10 @@ print('---')
 loadAll={}
 	
 for link in links:
-	print("#link %s-%s: %d pkts/sec"%(link[0],link[1],net[link[0]][link[1]]['load']))
-#	loadAll.update({(link[0],link[1]):net[link[0]][link[1]]['load']})
-	print("#link %s-%s: %d pkts/sec"%(link[1],link[0],net[link[1]][link[0]]['load']))
-#	loadAll.update({(link[0],link[1]):net[link[1]][link[0]]['load']})
+	print("#link %s-%s: %d pkts/sec"%(link[0],link[1],net[link[0]][link[1]]['delay']))
+	loadAll.update({(link[0],link[1]):net[link[0]][link[1]]['load']})
+	print("#link %s-%s: %d pkts/sec"%(link[1],link[0],net[link[1]][link[0]]['delay']))
+	loadAll.update({(link[0],link[1]):net[link[1]][link[0]]['load']})
 	
 print(loadAll)
 

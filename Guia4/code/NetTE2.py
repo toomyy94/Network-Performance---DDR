@@ -51,6 +51,7 @@ sol={}
 
 for pair in allpairs:
 	path=nx.shortest_path(net,pair[0],pair[1],weight='load')
+	print pair
 	sol.update({pair:path})
 	for i in range(0,len(path)-1):
 		net[path[i]][path[i+1]]['load']+=tm[pair[0]][pair[1]]
@@ -66,19 +67,19 @@ for pair in allpairs:
 	for i in range(0,len(path)-1):
 		Ws+=1e6/(mu-net[path[i]][path[i+1]]['load'])+net[path[i]][path[i+1]]['distance']/lightspeed
 		WsAll.update({pair:Ws})
-		print('#flow %s-%s: %.2f micro sec'%(pair[0],pair[1],Ws))
+		#print('#flow %s-%s: %.2f micro sec'%(pair[0],pair[1],Ws))
 
 meanWs, maxWs, maxWsK = listStats(WsAll)
-print('Mean one-way delay: %.2f ms\nMaximum one-way delay: %.2f micro sec for flow %s-%s'%(meanWs,maxWs,maxWsK[0],maxWsK[1]))
+print('Mean one-way delay: %.2f ms\nMaximum one-way delay: %.2f mili sec for flow %s-%s'%(meanWs,maxWs,maxWsK[0],maxWsK[1]))
 
 print('---')
 loadAll={}
 	
 for link in links:
-	print("#link %s-%s: %d pkts/sec"%(link[0],link[1],net[link[0]][link[1]]['load']))
+	#print("#link %s-%s: %d pkts/sec"%(link[0],link[1],net[link[0]][link[1]]['load']))
 	loadAll.update({(link[0],link[1]):net[link[0]][link[1]]['load']})
 	print("#link %s-%s: %d pkts/sec"%(link[1],link[0],net[link[1]][link[0]]['load']))
-	loadAll.update({(link[0],link[1]):net[link[1]][link[0]]['load']})
+	#loadAll.update({(link[0],link[1]):net[link[1]][link[0]]['load']})
 	
 print(loadAll)
 
