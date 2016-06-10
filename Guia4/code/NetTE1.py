@@ -23,7 +23,7 @@ def listStats(L):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-f', '--file', nargs='?', help='input network file', default='network.dat')
+parser.add_argument('-f', '--file', nargs='?', help='input network file', default='smallnet.dat')
 args=parser.parse_args()
 
 filename=args.file 
@@ -55,10 +55,12 @@ for pair in allpairs:
 	for i in range(0,len(path)-1):
 		net[path[i]][path[i+1]]['load']+=tm[pair[0]][pair[1]]
 
-print('---')
-print('Solution:'+str(sol))
+#print('---')
+#print('Solution:'+str(sol))
 
 WsAll={}
+
+
 
 for pair in allpairs:
 	Ws = 0 
@@ -67,6 +69,7 @@ for pair in allpairs:
 		Ws+=1e6/(mu-net[path[i]][path[i+1]]['load'])+net[path[i]][path[i+1]]['distance']/lightspeed
 		WsAll.update({pair:Ws})
 		print('#flow %s-%s: %.2f micro sec'%(pair[0],pair[1],Ws))
+		
 
 meanWs, maxWs, maxWsK = listStats(WsAll)
 print('Mean one-way delay: %.2f ms\nMaximum one-way delay: %.2f mili sec for flow %s-%s'%(meanWs,maxWs,maxWsK[0],maxWsK[1]))
@@ -79,8 +82,13 @@ for link in links:
 	loadAll.update({(link[0],link[1]):net[link[0]][link[1]]['load']})
 	print("#link %s-%s: %d pkts/sec"%(link[1],link[0],net[link[1]][link[0]]['load']))
 	loadAll.update({(link[0],link[1]):net[link[1]][link[0]]['load']})
+	meanL, maxL, maxLK = listStats(loadAll)
 	
-print(loadAll)
+print('Mean link load: %.2f pkts/seg \nMaximum link load: %.2f pkts/seg for flow %s-%s'%(meanL,maxL,maxLK[0],maxLK[1]))	
+	
+#print(loadAll)
+
+
 
 	
 	
